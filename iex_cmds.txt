@@ -1,0 +1,5 @@
+{:ok, pid} = Postgrex.start_link(hostname: "localhost", username: "postgres", password: "postgres", database: "thist", extensions: [{Postgrex.Extensions.JSON, [library: Poison]}])
+Postgrex.query!(pid, "SELECT * FROM tweets", [])
+[t2] = ExTwitter.home_timeline([count: 1])
+Postgrex.query!(pid, "INSERT INTO tweets (data) VALUES ($1)", [t2])
+HTTPoison.head!("https://t.co/A1UnFHzPOC")
